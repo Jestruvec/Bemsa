@@ -6,7 +6,7 @@
     validate-on="submit"
     class="border border-dashed rounded border-gray-300"
   >
-    <div class="flex flex-col gap-4 p-4">
+    <div class="flex flex-col gap-4 pa-4">
       <h1>Iniciar sesion en PLATFORM_NAME</h1>
       <v-text-field
         v-model="username"

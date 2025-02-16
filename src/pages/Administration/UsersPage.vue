@@ -1,5 +1,5 @@
 <template>
-  <div class="p-4">
+  <div class="pa-4">
     <UserModal v-model="showModal" @user-created="showModal = false" />
 
     <div class="mb-4">

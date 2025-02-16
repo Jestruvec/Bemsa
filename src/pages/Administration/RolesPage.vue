@@ -1,5 +1,5 @@
 <template>
-  <div class="h-full p-4">
+  <div class="h-full pa-4">
     <RoleModal v-model="showModal" @role-created="showModal = false" />
 
     <div class="mb-4">

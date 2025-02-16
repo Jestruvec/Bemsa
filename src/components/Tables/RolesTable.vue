@@ -1,10 +1,7 @@
 <template>
   <v-data-table-virtual :headers="headers" :items="roles" item-value="id">
     <template #item="{ item }">
-      <tr
-        class="hover:bg-gray-100 cursor-pointer"
-        @click="$emit('onRowClick', item)"
-      >
+      <tr class="cursor-pointer" @click="$emit('onRowClick', item)">
         <td>
           <div class="flex justify-center">
             {{ item.role }}

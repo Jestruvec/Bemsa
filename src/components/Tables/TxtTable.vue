@@ -11,10 +11,7 @@
     @update:model-value="$emit('onCheckAll', localSelectedTxtIds)"
   >
     <template #item="{ item }">
-      <tr
-        class="hover:bg-gray-100 cursor-pointer"
-        @click="$emit('onRowClick', item)"
-      >
+      <tr class="cursor-pointer" @click="$emit('onRowClick', item)">
         <td>
           <v-checkbox
             v-model="localSelectedTxtIds"

@@ -1,5 +1,5 @@
 <template>
-  <div class="p-4">
+  <div class="pa-4">
     <TxtModal
       v-model="showModal"
       ref="txtModal"
@@ -11,7 +11,7 @@
     <div class="flex justify-between mb-4">
       <div class="flex flex-wrap gap-2">
         <NewRegisterButton @on-click="showModal = true" />
-        <ExcelButton @on-click="toast.warning('Funcion en desarrollo')" />
+        <!-- <ExcelButton @on-click="toast.warning('Funcion en desarrollo')" /> -->
 
         <div class="w-48 bg-surface">
           <SearchBar
@@ -58,20 +58,17 @@
 
 <script lang="ts" setup>
 import { ref } from "vue";
-import { useToast } from "vue-toastification";
 import {
   TxtModal,
   TxtTable,
   TooltipButton,
   SearchBar,
   NewRegisterButton,
-  ExcelButton,
 } from "../../components";
 import type { Txt } from "../../types";
 import { TxtArray } from "../../utils";
 import { TxtStatusEnum } from "../../enums";
 
-const toast = useToast();
 const searchInput = ref("");
 const txtForEdition = ref<Txt>();
 const selectedTxtIds = ref<string[]>([]);
