@@ -1,0 +1,28 @@
+@import "tailwindcss";
+
+/* Estilos para navegadores WebKit (Chrome, Edge, Safari) */
+::-webkit-scrollbar {
+  width: 6px; /* Grosor de la barra de desplazamiento */
+  height: 6px; /* Grosor de la barra horizontal */
+}
+
+::-webkit-scrollbar-track {
+  background: transparent; /* Fondo de la barra de desplazamiento */
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 4px; /* Bordes redondeados */
+}
+
+/* Estilos para Firefox */
+* {
+  scrollbar-width: thin; /* Grosor reducido */
+}
+
+.swal2-container {
+  z-index: 9999 !important; /* Asegurar que esté por encima de los modales de Vuetify */
+}
+
+.swal2-popup {
+  z-index: 9999 !important;
+}
