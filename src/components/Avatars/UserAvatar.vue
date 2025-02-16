@@ -5,6 +5,7 @@
       :color="user.role.name.includes('Admin') ? '#FFD700' : 'primary'"
     />
   </template>
+
   <template v-else>
     <v-avatar
       :image="user.imgUrl"
