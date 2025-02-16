@@ -8,7 +8,6 @@ export default defineConfig({
   resolve: {
     alias: {
       "@": path.resolve("/src"),
-      crypto: "crypto-browserify",
     },
   },
 });
