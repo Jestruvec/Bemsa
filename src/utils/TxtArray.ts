@@ -36,7 +36,7 @@ export const TxtArray = ref<Txt[]>([
       currencyCode: CurrencyCodeEnum.pesos,
       emisorAccountType: AccountTypeEnum.clabeAccount,
       receiverAccountType: AccountTypeEnum.clabeAccount,
-      emisorAccountNumber: 1234,
+      emisorAccountNumber: 12345,
       receiverAccountNumber: 5678,
       iva: "000000000000000",
       filler: "000000000",
