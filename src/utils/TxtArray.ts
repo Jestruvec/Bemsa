@@ -13,7 +13,7 @@ import { Users } from "./";
 
 export const TxtArray = ref<Txt[]>([
   {
-    id: new Date().toString().randomUUID(),
+    id: new Date().toString(),
     approved_at: null,
     created_at: "2025-02-12",
     description: `Test 1`,
@@ -21,14 +21,14 @@ export const TxtArray = ref<Txt[]>([
     approved_by: null,
     created_by: Users[2],
     header: {
-      id: new Date().toString().randomUUID(),
+      id: new Date().toString(),
       type: TxtTypeEnum.HEADER,
       consecutive: "000",
       date: "2025-02-20",
       sequencyNumber: "0000001",
     },
     details: Array.from({ length: 10 }, (_, detailIndex) => ({
-      id: new Date().toString().randomUUID(),
+      id: new Date().toString(),
       type: TxtTypeEnum.DETAIL,
       sequencyNumber: detailIndex + 1,
       alias: `Prueba ${detailIndex + 1}`,
@@ -48,7 +48,7 @@ export const TxtArray = ref<Txt[]>([
       speiSpidReference: 1234,
     })),
     summary: {
-      id: new Date().toString().randomUUID(),
+      id: new Date().toString(),
       type: TxtTypeEnum.SUMMARY,
       numberOfOperations: 10,
       totalOperationsAmount: 10000,

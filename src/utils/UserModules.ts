@@ -8,25 +8,25 @@ interface NavItem {
 
 export const UserSystemModules: NavItem[] = [
   {
-    id: new Date().toString().randomUUID(),
+    id: new Date().toString(),
     description: "Administracion",
     url: "/administration",
     icon: "mdi-table",
     children: [
       {
-        id: new Date().toString().randomUUID(),
+        id: new Date().toString(),
         description: "Usuarios",
         url: "/administration/users",
         icon: "mdi-account-multiple",
       },
       {
-        id: new Date().toString().randomUUID(),
+        id: new Date().toString(),
         description: "Roles",
         url: "/administration/roles",
         icon: "mdi-account-cog",
       },
       {
-        id: new Date().toString().randomUUID(),
+        id: new Date().toString(),
         description: "Txt",
         url: "/administration/txt",
         icon: "mdi-text-account",
