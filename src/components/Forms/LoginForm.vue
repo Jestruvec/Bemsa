@@ -80,7 +80,7 @@ const login = async (): Promise<{ username: string; token: string }> => {
   return new Promise((resolve, reject) => {
     setTimeout(() => {
       if (username.value === "admin" && password.value === "123") {
-        resolve({ username: username.value, token: new Date().toString() });
+        resolve({ username: username.value, token: crypto.randomUUID() });
       } else {
         reject("Credenciales invalidas");
       }

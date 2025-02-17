@@ -35,13 +35,13 @@ const router = useRouter();
 
 const userMenuItems = ref<UserMenuItem[]>([
   {
-    id: new Date().toString(),
+    id: crypto.randomUUID(),
     description: "Configuracion de la cuenta",
     icon: "mdi-cog",
     fn: () => router.push("/settings"),
   },
   {
-    id: new Date().toString(),
+    id: crypto.randomUUID(),
     description: "Cerrar sesion",
     icon: "mdi-logout",
     fn: () => logout(),

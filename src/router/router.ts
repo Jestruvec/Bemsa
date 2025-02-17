@@ -6,36 +6,27 @@ const routes = [
   { path: "/login", component: Pages.Login },
   {
     path: "/",
-    redirect: "/home",
     component: MainLayout,
+    redirect: "/home",
     children: [
-      { path: "/home", component: Pages.Home },
-      { path: "/settings", component: Pages.Settings },
+      { path: "home", component: Pages.Home },
+      { path: "settings", component: Pages.Settings },
       {
-        path: "/administration",
-        redirect: "/administration/users",
+        path: "administration",
+        redirect: "administration/users",
         children: [
-          {
-            path: "/administration/users",
-            component: Pages.Users,
-          },
-          {
-            path: "/administration/roles",
-            component: Pages.Roles,
-          },
-          {
-            path: "/administration/txt",
-            component: Pages.Txt,
-          },
+          { path: "users", component: Pages.Users },
+          { path: "roles", component: Pages.Roles },
+          { path: "txt", component: Pages.Txt },
         ],
       },
-      { path: "/:pathMatch(.*)*", component: Pages.NotFound }, // Para manejar 404
+      { path: "/:pathMatch(.*)*", component: Pages.NotFound },
     ],
   },
 ];
 
 const router = createRouter({
-  history: createWebHistory(), // Usa WebHistory para navegación en el navegador
+  history: createWebHistory(import.meta.env.BASE_URL), // Usar BASE_URL de Vite
   routes,
 });
 

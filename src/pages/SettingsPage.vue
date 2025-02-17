@@ -1,5 +1,5 @@
 <template>
-  <div class="p-4">
+  <div class="pa-4">
     <v-card>
       <v-list-item title="Administrador" subtitle="Administrador">
         <template #prepend>

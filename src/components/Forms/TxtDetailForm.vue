@@ -168,7 +168,7 @@ const emits = defineEmits(["addDetail", "editDetail"]);
 const props = defineProps<{ detailForEdition?: TxtDetail }>();
 const form = ref();
 const data = ref<TxtDetail>({
-  id: new Date().toString(),
+  id: crypto.randomUUID(),
   type: TxtTypeEnum.DETAIL,
   sequencyNumber: 2,
   filler: "000000000",
@@ -201,7 +201,7 @@ const handleSubmit = async () => {
       : emits("addDetail", data.value);
 
     data.value = {
-      id: new Date().toString(),
+      id: crypto.randomUUID(),
       type: "02",
       sequencyNumber: 2,
       filler: "000000000",
