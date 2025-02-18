@@ -8,12 +8,11 @@
       @on-submit="closeModal"
     />
 
-    <div class="flex justify-between mb-4">
-      <div class="flex flex-wrap gap-1 sm:gap-2">
+    <div class="flex justify-between mb-4 gap-1">
+      <div class="flex gap-1 sm:gap-2 w-100">
         <NewRegisterButton @on-click="showModal = true" />
-        <!-- <ExcelButton @on-click="toast.warning('Funcion en desarrollo')" /> -->
 
-        <div class="w-28 sm:w-40 bg-surface">
+        <div class="bg-surface w-100 max-w-[12rem]">
           <SearchBar
             @update="(searchQuery: string) => searchInput = searchQuery"
           />
