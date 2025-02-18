@@ -1,7 +1,11 @@
 <template>
   <v-data-table-virtual :headers="headers" :items="Users" item-value="id">
     <template #item="{ item }">
-      <tr class="cursor-pointer" @click="$emit('onRowClick', item)">
+      <tr
+        class="cursor-pointer"
+        :class="[current.dark ? 'hover:bg-zinc-700' : 'hover:bg-gray-100']"
+        @click="$emit('onRowClick', item)"
+      >
         <td>
           <UserAvatar :user="item" />
         </td>
@@ -32,11 +36,12 @@
 
 <script lang="ts" setup>
 import { computed } from "vue";
-import { useDisplay } from "vuetify";
+import { useDisplay, useTheme } from "vuetify";
 import { UserAvatar } from "..";
 import { Users } from "@/utils";
 
 const { mobile } = useDisplay();
+const { current } = useTheme();
 
 defineEmits(["onRowClick"]);
 

@@ -1,5 +1,5 @@
 <template>
-  <div class="pa-4">
+  <div class="pa-4 h-100">
     <TxtModal
       v-model="showModal"
       ref="txtModal"
@@ -8,12 +8,14 @@
       @on-submit="closeModal"
     />
 
-    <div class="flex justify-between mb-4">
-      <div class="flex flex-wrap gap-1 sm:gap-2">
+    <div class="flex justify-between mb-4 gap-1">
+      <div class="flex gap-1 sm:gap-2 w-100">
         <NewRegisterButton @on-click="showModal = true" />
-        <!-- <ExcelButton @on-click="toast.warning('Funcion en desarrollo')" /> -->
 
-        <div class="w-28 sm:w-40 bg-surface">
+        <div
+          class="sm:w-40 bg-surface"
+          :class="selectedTxtIds.length ? ['w-28'] : ['w-60']"
+        >
           <SearchBar
             @update="(searchQuery: string) => searchInput = searchQuery"
           />
@@ -44,29 +46,42 @@
       </template>
     </div>
 
-    <TxtTable
-      :data="TxtArray"
-      :search="searchInput"
-      :selected-txt-ids="selectedTxtIds"
-      @on-row-click="openModalForEdition"
-      @on-row-check="openApprovalOptions"
-      @on-check-all="openApprovalOptions"
-    />
+    <div
+      :class="
+        mobile && showNavDrawer
+          ? ['h-[calc(100vh-22.75rem)]']
+          : mobile
+          ? ['h-[calc(100vh-9.75rem)]']
+          : ['h-[calc(100vh-9.5rem)]']
+      "
+      class="overflow-auto"
+    >
+      <TxtTable
+        :data="TxtArray"
+        :search="searchInput"
+        :selected-txt-ids="selectedTxtIds"
+        @on-row-click="openModalForEdition"
+        @on-row-check="openApprovalOptions"
+        @on-check-all="openApprovalOptions"
+      />
+    </div>
   </div>
 </template>
 
 <script lang="ts" setup>
 import { ref } from "vue";
+import { useDisplay } from "vuetify";
 import {
   TxtModal,
   TxtTable,
   TooltipButton,
   SearchBar,
   NewRegisterButton,
-} from "../../components";
-import type { Txt } from "../../types";
-import { TxtArray } from "../../utils";
-import { TxtStatusEnum } from "../../enums";
+} from "@/components";
+import type { Txt } from "@/types";
+import { TxtArray } from "@/utils";
+import { TxtStatusEnum } from "@/enums";
+import { useNavDrawer } from "@/hooks";
 
 const searchInput = ref("");
 const txtForEdition = ref<Txt>();
@@ -74,6 +89,8 @@ const selectedTxtIds = ref<string[]>([]);
 const showApprovalOptions = ref(false);
 const showModal = ref(false);
 const txtModal = ref();
+const { mobile } = useDisplay();
+const { showNavDrawer } = useNavDrawer();
 
 const openModalForEdition = (txt: Txt) => {
   txtForEdition.value = txt;

@@ -1,7 +1,11 @@
 <template>
   <v-data-table-virtual :headers="headers" :items="roles" item-value="id">
     <template #item="{ item }">
-      <tr class="cursor-pointer" @click="$emit('onRowClick', item)">
+      <tr
+        class="cursor-pointer"
+        :class="[current.dark ? 'hover:bg-zinc-700' : 'hover:bg-gray-100']"
+        @click="$emit('onRowClick', item)"
+      >
         <td>
           <div class="flex justify-center">
             {{ item.role }}
@@ -24,7 +28,10 @@
 </template>
 
 <script lang="ts" setup>
+import { useTheme } from "vuetify";
+
 defineEmits(["onRowClick"]);
+const { current } = useTheme();
 
 const headers: any = [
   { title: "Rol", key: "role", align: "center" },

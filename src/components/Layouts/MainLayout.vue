@@ -4,15 +4,15 @@
 
     <MainSidebar v-model="showNavDrawer" />
 
-    <v-main>
+    <v-main class="pb-0">
       <RouterView />
     </v-main>
   </v-layout>
 </template>
 
 <script lang="ts" setup>
-import { ref } from "vue";
-import { MainHeader, MainSidebar } from "../";
+import { MainHeader, MainSidebar } from "@/components";
+import { useNavDrawer } from "@/hooks";
 
-const showNavDrawer = ref(true);
+const { showNavDrawer } = useNavDrawer();
 </script>
