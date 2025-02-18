@@ -12,6 +12,7 @@
 
 <script lang="ts" setup>
 import { ref } from "vue";
+
 import { RolesTable, RoleModal, NewRegisterButton } from "../../components";
 
 const roleForEdition = ref();

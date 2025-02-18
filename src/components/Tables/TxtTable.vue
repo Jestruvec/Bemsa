@@ -35,7 +35,7 @@
           </div>
         </td>
 
-        <td>
+        <td :class="{ hidden: mobile }">
           <div class="flex justify-center items-center gap-4">
             <UserAvatar class="flex-1" :user="item.created_by" />
             <span class="flex-1">
@@ -44,7 +44,7 @@
           </div>
         </td>
 
-        <td>
+        <td :class="{ hidden: mobile }">
           <div class="flex justify-center items-center gap-4">
             <template v-if="item.approved_by">
               <UserAvatar class="flex-1" :user="item.approved_by" />
@@ -59,13 +59,13 @@
           </div>
         </td>
 
-        <td>
+        <td :class="{ hidden: mobile }">
           <div class="flex justify-center">
             {{ item.created_at }}
           </div>
         </td>
 
-        <td>
+        <td :class="{ hidden: mobile }">
           <div class="flex justify-center">
             <span>
               {{ item.approved_at || "N/A" }}
@@ -92,8 +92,9 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, watch } from "vue";
+import { ref, watch, computed } from "vue";
 import { UserAvatar } from "..";
+import { useDisplay } from "vuetify";
 import { TxtStatusEnum } from "../../enums";
 import type { Txt, TxtDetail, TxtHeader } from "../../types";
 import { TransferLayout } from "../../utils";
@@ -106,15 +107,25 @@ const props = defineProps<{
 defineEmits(["onRowClick", "onRowCheck", "onCheckAll"]);
 
 const localSelectedTxtIds = ref<string[]>([]);
-const headers: any = [
-  { title: "Estado", key: "status", align: "center" },
-  { title: "Descripcion", key: "description", align: "center" },
-  { title: "Creado por", key: "created_by.name", align: "center" },
-  { title: "Revisado por", key: "approved_by.name", align: "center" },
-  { title: "Fecha de creacion", key: "date", align: "center" },
-  { title: "Fecha de revision", key: "approved_at", align: "center" },
-  {},
-];
+const { mobile } = useDisplay();
+
+const headers = computed((): any[] => {
+  return mobile.value
+    ? [
+        { title: "Estado", key: "status", align: "center" },
+        { title: "Descripcion", key: "description", align: "center" },
+        {},
+      ]
+    : [
+        { title: "Estado", key: "status", align: "center" },
+        { title: "Descripcion", key: "description", align: "center" },
+        { title: "Creado por", key: "created_by.name", align: "center" },
+        { title: "Revisado por", key: "approved_by.name", align: "center" },
+        { title: "Fecha de creacion", key: "date", align: "center" },
+        { title: "Fecha de revision", key: "approved_at", align: "center" },
+        {},
+      ];
+});
 
 watch(
   () => props.selectedTxtIds,
@@ -130,57 +141,37 @@ const getStatusData = (txt: Txt) => {
     case TxtStatusEnum.rejected:
       return { color: "error", text: "No aprobado" };
     default:
-      return { color: "warning", text: "Esperando aprobacion" };
+      return { color: "warning", text: "Esperando" };
   }
 };
 
 const downloadTxt = (txt: Txt) => {
-  // 1️⃣ Crear contenido del archivo
   const txtContent = getTxtContent(txt);
-
-  // 2️⃣ Crear un Blob con el contenido
   const blob = new Blob([txtContent], { type: "text/plain" });
-
-  // 3️⃣ Crear una URL para el Blob
   const url = URL.createObjectURL(blob);
-
-  // 4️⃣ Crear un enlace temporal para descargarlo
   const link = document.createElement("a");
   link.href = url;
   link.download = "archivo.txt";
-
-  // 5️⃣ Agregar el enlace al DOM, hacer clic y removerlo
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);
-
-  // 6️⃣ Liberar memoria eliminando la URL
   URL.revokeObjectURL(url);
 };
 
 const getTxtContent = (txt: Txt) => {
   const content: string[] = [];
-
   const header = getTxtHeaderContent(txt.header);
   const details = getTxtDetailsContent(txt.details);
   const summary = getTxtSummaryContent(txt);
-
   content.push(header);
   details.forEach((detail) => content.push(detail));
   content.push(summary);
-
-  return content.join("\n"); // 🔹 Une los elementos con saltos de línea
+  return content.join("\n");
 };
-
 const getTxtHeaderContent = (txtHeader: TxtHeader) => {
   const { type, sequencyNumber, date, consecutive } = txtHeader;
-  const header = `${type}${sequencyNumber}${date
-    .split("-")
-    .join("")}${consecutive}`;
-
-  return header;
+  return `${type}${sequencyNumber}${date.split("-").join("")}${consecutive}`;
 };
-
 const getTxtDetailsContent = (txtDetails: TxtDetail[]) => {
   return txtDetails.map((detail, index) => {
     const {
@@ -202,9 +193,8 @@ const getTxtDetailsContent = (txtDetails: TxtDetail[]) => {
       operationClass,
     } = detail;
 
-    // Función auxiliar para simplificar el padding
     const pad = (value: string | number, length: number) =>
-      padWithZeros(String(value), length);
+      String(value).padStart(length, "0");
 
     const sequenceNumber = pad(
       index + 2,
@@ -241,7 +231,6 @@ const getTxtDetailsContent = (txtDetails: TxtDetail[]) => {
     );
   });
 };
-
 const getTxtSummaryContent = (txt: Txt) => {
   const { details, summary } = txt;
   const detailsLength = details.length;
@@ -265,7 +254,6 @@ const getTxtSummaryContent = (txt: Txt) => {
 
   return `${summary.type}${sequenceNumber}${numberOfTransactions}${totalTransactionAmountParsed}`;
 };
-
 const padWithZeros = (str: string, length: number) => {
   return str.padStart(length, "0");
 };

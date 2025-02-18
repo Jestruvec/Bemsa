@@ -9,20 +9,19 @@
     />
 
     <div class="flex justify-between mb-4">
-      <div class="flex flex-wrap gap-2">
+      <div class="flex flex-wrap gap-1 sm:gap-2">
         <NewRegisterButton @on-click="showModal = true" />
         <!-- <ExcelButton @on-click="toast.warning('Funcion en desarrollo')" /> -->
 
-        <div class="w-48 bg-surface">
+        <div class="w-28 sm:w-40 bg-surface">
           <SearchBar
-            variant="outlined"
             @update="(searchQuery: string) => searchInput = searchQuery"
           />
         </div>
       </div>
 
       <template v-if="selectedTxtIds.length">
-        <div class="flex gap-2">
+        <div class="flex gap-1 sm:gap-2">
           <TooltipButton
             btnColor="success"
             icon="mdi-check"

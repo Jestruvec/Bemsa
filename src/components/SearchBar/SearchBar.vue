@@ -3,7 +3,7 @@
     v-model="searchQuery"
     label="Buscar"
     clearable
-    variant="underlined"
+    variant="outlined"
     prepend-inner-icon="mdi-magnify"
     @update:model-value="$emit('update', searchQuery)"
   />

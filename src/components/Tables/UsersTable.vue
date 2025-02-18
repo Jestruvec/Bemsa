@@ -10,12 +10,12 @@
             {{ item.name }}
           </div>
         </td>
-        <td>
+        <td :class="{ hidden: mobile }">
           <div class="flex justify-center">
             {{ item.lastName }}
           </div>
         </td>
-        <td>
+        <td :class="{ hidden: mobile }">
           <div class="flex justify-center">
             {{ item.email }}
           </div>
@@ -31,15 +31,28 @@
 </template>
 
 <script lang="ts" setup>
+import { computed } from "vue";
+import { useDisplay } from "vuetify";
 import { UserAvatar } from "..";
-import { Users } from "../../utils";
+import { Users } from "@/utils";
+
+const { mobile } = useDisplay();
 
 defineEmits(["onRowClick"]);
-const headers: any = [
-  { title: "", key: "avatar", align: "center" },
-  { title: "Nombre", key: "name", align: "center" },
-  { title: "Apellido", key: "lastName", align: "center" },
-  { title: "Correo", key: "email", align: "center" },
-  { title: "Rol", key: "role.name", align: "center" },
-];
+
+const headers = computed((): any[] => {
+  return mobile.value
+    ? [
+        { title: "", key: "avatar", align: "center" },
+        { title: "Nombre", key: "name", align: "center" },
+        { title: "Rol", key: "role.name", align: "center" },
+      ]
+    : [
+        { title: "", key: "avatar", align: "center" },
+        { title: "Nombre", key: "name", align: "center" },
+        { title: "Apellido", key: "lastName", align: "center" },
+        { title: "Correo", key: "email", align: "center" },
+        { title: "Rol", key: "role.name", align: "center" },
+      ];
+});
 </script>

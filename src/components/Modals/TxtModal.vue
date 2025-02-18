@@ -95,14 +95,20 @@ import {
   NextPrevButton,
 } from "@/components";
 import type { Txt, TxtDetail } from "@/types";
-import { TxtArray, TransferLayout } from "@/utils";
+import { TxtArray, TransferLayout, Users } from "@/utils";
 import { FormRules } from "@/helpers";
-import { TxtTypeEnum } from "@/enums";
+import { TxtStatusEnum, TxtTypeEnum } from "@/enums";
 
 const props = defineProps<{ txtForEdition?: Txt }>();
 const emits = defineEmits(["onSubmit"]);
 const toast = useToast();
 const txt = ref<Txt>({
+  id: crypto.randomUUID(),
+  approved_at: "",
+  created_at: new Date().toISOString(),
+  approved_by: Users[0],
+  created_by: Users[1],
+  status: TxtStatusEnum.waiting,
   header: {
     type: TransferLayout.header.recordType.value,
     sequencyNumber: TransferLayout.header.sequenceNumber.value,
