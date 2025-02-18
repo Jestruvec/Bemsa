@@ -3,7 +3,6 @@
     v-model="localSelectedTxtIds"
     :headers="headers"
     :items="data"
-    mobile-breakpoint="lg"
     show-select
     :search="search"
     filter-mode="some"
@@ -125,13 +124,11 @@ const headers = computed((): any[] => {
           title: "Creado por",
           key: "created_by.name",
           align: "center",
-          value: (item: Txt) => item.created_by?.name,
         },
         {
           title: "Revisado por",
           key: "approved_by.name",
           align: "center",
-          value: (item: Txt) => item.approved_by?.name,
         },
         { title: "Fecha de creacion", key: "created_at", align: "center" },
         { title: "Fecha de revision", key: "approved_at", align: "center" },
