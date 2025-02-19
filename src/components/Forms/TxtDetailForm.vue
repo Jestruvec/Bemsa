@@ -5,146 +5,135 @@
     @submit.prevent
     @submit="handleSubmit"
   >
-    <v-row>
-      <v-col cols="12" sm="6">
-        <div class="flex-1 flex flex-col gap-2 py-1">
-          <v-text-field
-            v-model="data.alias"
-            :rules="validationRules.maxLength('alias')"
-            label="Alias"
-          />
+    <div class="flex flex-col gap-4">
+      <h1 class="font-bold text-xl">Agregar nuevo detalle</h1>
 
-          <v-text-field
-            v-model="data.type"
-            :rules="validationRules.maxLength('recordType')"
-            label="Tipo de registro"
-            disabled
-          />
+      <v-row>
+        <v-col cols="12" sm="4">
+          <div class="flex-1 flex flex-col gap-2 py-1">
+            <v-select
+              v-model="data.emisorAccountType"
+              :items="AccountTypes"
+              :rules="validationRules.maxLength('senderAccountType')"
+              item-title="description"
+              item-value="value"
+              label="Tipo de cuenta del emisor"
+            />
 
-          <v-text-field
-            v-model="data.sequencyNumber"
-            :rules="validationRules.maxLength('sequenceNumber')"
-            label="Numero de secuencia"
-            type="number"
-            disabled
-          />
+            <v-text-field
+              v-model="data.emisorAccountNumber"
+              :rules="validationRules.maxLength('senderAccountNumber')"
+              label="Numero de cuenta del emisor"
+              type="number"
+            />
 
-          <v-select
-            v-model="data.emisorAccountType"
-            :items="AccountTypes"
-            :rules="validationRules.maxLength('senderAccountType')"
-            item-title="description"
-            item-value="value"
-            label="Tipo de cuenta del emisor"
-          />
+            <v-select
+              v-model="data.currencyCode"
+              :items="CurrencyCodes"
+              item-title="description"
+              item-value="value"
+              :rules="validationRules.maxLength('currencyCode')"
+              label="Codigo de divisa"
+            />
 
-          <v-text-field
-            v-model="data.emisorAccountNumber"
-            :rules="validationRules.maxLength('senderAccountNumber')"
-            label="Numero de cuenta del emisor"
-            type="number"
-          />
+            <v-autocomplete
+              v-model="data.receivingBank"
+              :items="Banks"
+              item-title="description"
+              item-value="value"
+              :rules="validationRules.maxLength('receivingBank')"
+              label="Banco receptor"
+            />
 
-          <v-select
-            v-model="data.currencyCode"
-            :items="CurrencyCodes"
-            item-title="description"
-            item-value="value"
-            :rules="validationRules.maxLength('currencyCode')"
-            label="Codigo de divisa"
-          />
+            <v-text-field
+              v-model="data.amount"
+              :rules="validationRules.maxLength('transactionAmount')"
+              label="Monto a transferir"
+              type="number"
+            />
+          </div>
+        </v-col>
 
-          <v-autocomplete
-            v-model="data.receivingBank"
-            :items="Banks"
-            item-title="description"
-            item-value="value"
-            :rules="validationRules.maxLength('receivingBank')"
-            label="Banco receptor"
-          />
+        <v-col cols="12" sm="4">
+          <div class="flex-1 flex flex-col gap-2 py-1">
+            <v-text-field
+              v-model="data.aplicationDate"
+              :rules="[FormRules.required]"
+              label="Fecha de aplicacion"
+              type="date"
+            />
 
-          <v-text-field
-            v-model="data.amount"
-            :rules="validationRules.maxLength('transactionAmount')"
-            label="Monto a transferir"
-            type="number"
-          />
+            <v-select
+              v-model="data.paymentMethod"
+              :items="PaymentMethods"
+              item-title="description"
+              item-value="value"
+              :rules="validationRules.maxLength('paymentMethod')"
+              label="Metodo de pago"
+            />
 
-          <v-text-field
-            v-model="data.aplicationDate"
-            :rules="[FormRules.required]"
-            label="Fecha de aplicacion"
-            type="date"
-          />
-        </div>
-      </v-col>
+            <v-select
+              v-model="data.receiverAccountType"
+              :items="AccountTypes"
+              item-title="description"
+              item-value="value"
+              :rules="validationRules.maxLength('receiverAccountType')"
+              label="Tipo de cuenta del receptor"
+            />
 
-      <v-col cols="12" sm="6">
-        <div class="flex-1 flex flex-col gap-2 py-1">
-          <v-select
-            v-model="data.paymentMethod"
-            :items="PaymentMethods"
-            item-title="description"
-            item-value="value"
-            :rules="validationRules.maxLength('paymentMethod')"
-            label="Metodo de pago"
-          />
+            <v-text-field
+              v-model="data.receiverAccountNumber"
+              :rules="validationRules.maxLength('receiverAccountNumber')"
+              label="Numero de cuenta del receptor"
+            />
 
-          <v-select
-            v-model="data.receiverAccountType"
-            :items="AccountTypes"
-            item-title="description"
-            item-value="value"
-            :rules="validationRules.maxLength('receiverAccountType')"
-            label="Tipo de cuenta del receptor"
-          />
+            <v-text-field
+              v-model="data.alias"
+              :rules="validationRules.maxLength('alias')"
+              label="Alias"
+              hint="Alias registrado del proveedor"
+            />
+          </div>
+        </v-col>
 
-          <v-text-field
-            v-model="data.receiverAccountNumber"
-            :rules="validationRules.maxLength('receiverAccountNumber')"
-            label="Numero de cuenta del receptor"
-          />
+        <v-col cols="12" sm="4">
+          <div class="flex-1 flex flex-col gap-2 py-1">
+            <v-text-field
+              v-model="iva"
+              :rules="validationRules.maxLength('vatTransactionAmount')"
+              disabled
+              label="IVA"
+            />
 
-          <v-text-field
-            v-model="data.filler"
-            :rules="validationRules.maxLength('filler')"
-            label="Filler"
-            disabled
-          />
+            <v-text-field
+              v-model="data.reference"
+              :rules="validationRules.maxLength('reference')"
+              label="Referencia"
+            />
 
-          <v-text-field
-            v-model="data.iva"
-            :rules="validationRules.maxLength('vatTransactionAmount')"
-            hint="Si no aplica, rellenar con 15 ceros"
-            label="IVA"
-          />
+            <v-text-field
+              v-model="data.speiSpidReference"
+              :rules="validationRules.maxLength('speiSpidReference')"
+              label="Referencia SPEI / SPID"
+              type="number"
+            />
 
-          <v-text-field
-            v-model="data.reference"
-            :rules="validationRules.maxLength('reference')"
-            label="Referencia"
-          />
+            <v-autocomplete
+              v-model="data.operationClass"
+              :items="OperationClasses"
+              item-title="description"
+              item-value="value"
+              :rules="validationRules.maxLength('transactionClassification')"
+              label="Clasificacion de la operacion"
+            />
 
-          <v-text-field
-            v-model="data.speiSpidReference"
-            :rules="validationRules.maxLength('speiSpidReference')"
-            label="Referencia SPEI / SPID"
-            type="number"
-          />
-
-          <v-autocomplete
-            v-model="data.operationClass"
-            :items="OperationClasses"
-            item-title="description"
-            item-value="value"
-            :rules="validationRules.maxLength('transactionClassification')"
-            label="Clasificacion de la operacion"
-          />
-
-          <v-btn type="submit"> {{ isEditing ? "Guardar" : "Agregar" }} </v-btn>
-        </div>
-      </v-col>
-    </v-row>
+            <v-btn type="submit">
+              {{ isEditing ? "Guardar" : "Agregar" }}
+            </v-btn>
+          </div>
+        </v-col>
+      </v-row>
+    </div>
   </v-form>
 </template>
 
@@ -172,9 +161,21 @@ const data = ref<TxtDetail>({
   type: TxtTypeEnum.DETAIL,
   sequencyNumber: 2,
   filler: "000000000",
+  amount: 0,
 } as TxtDetail);
 
 const isEditing = computed(() => !!props.detailForEdition);
+const iva = computed({
+  get: () => {
+    const base = data.value.amount / 1.16;
+    const iva = base * 0.16;
+
+    return iva.toFixed(2);
+  },
+  set: (value) => {
+    data.value.iva = String(value);
+  },
+});
 
 const validationRules = {
   maxLength: (field: DetailRecordKey) => [
@@ -205,6 +206,7 @@ const handleSubmit = async () => {
       type: "02",
       sequencyNumber: 2,
       filler: "000000000",
+      amount: 0,
     } as TxtDetail;
   } else {
     toast.warning("El formulario no es válido. Por favor, revisa los campos.");

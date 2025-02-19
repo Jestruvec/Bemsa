@@ -1,7 +1,7 @@
 <template>
   <v-list>
     <v-list-item>
-      <SearchBar @update="updateSearchQuery" />
+      <SearchBar @update="updateSearchQuery" variant="underlined" />
     </v-list-item>
 
     <v-list-item

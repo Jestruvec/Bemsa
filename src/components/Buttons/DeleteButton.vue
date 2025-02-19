@@ -2,7 +2,7 @@
   <v-btn color="error" @click="handleDelete">
     <div class="flex gap-1">
       <v-icon icon="mdi-delete-outline" color="white" />
-      <span v-if="!hideBtnTxt" class="hidden sm:inline">Eliminar</span>
+      <span v-if="!hideBtnTxt">Eliminar</span>
     </div>
   </v-btn>
 </template>
