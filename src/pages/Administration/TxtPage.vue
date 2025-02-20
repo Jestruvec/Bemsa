@@ -79,7 +79,7 @@ import {
   NewRegisterButton,
 } from "@/components";
 import type { Txt } from "@/types";
-import { TxtArray } from "@/utils";
+import { TxtArray, Users } from "@/utils";
 import { TxtStatusEnum } from "@/enums";
 import { useNavDrawer } from "@/hooks";
 
@@ -113,7 +113,11 @@ const updateTxtStatus = (newStatus: TxtStatusEnum) => {
     selectedTxtIds.value.includes(txt.id)
   );
 
-  txtForUpdate.forEach((txt) => (txt.status = newStatus));
+  txtForUpdate.forEach((txt) => {
+    txt.status = newStatus;
+    txt.approved_at = new Date().toLocaleDateString("en-CA");
+    txt.approved_by = Users[3];
+  });
 
   selectedTxtIds.value = [];
 };
