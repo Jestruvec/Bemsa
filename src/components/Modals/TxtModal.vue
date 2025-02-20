@@ -41,21 +41,20 @@
           />
         </div>
 
-        <template v-if="txt.details.length">
-          <div
-            class="max-h-[15rem] mt-2 overflow-auto border rounded border-gray-300 border-dashed"
-          >
-            <TxtDetailList
-              :data="txt.details"
-              @select-detail="selectDetail"
-              @delete-detail="deleteDetail"
-            />
-          </div>
-        </template>
+        <div
+          v-if="txt.details.length"
+          class="max-h-[15rem] mt-2 overflow-auto border rounded border-gray-300 border-dashed"
+        >
+          <TxtDetailList
+            :data="txt.details"
+            @select-detail="selectDetail"
+            @delete-detail="deleteDetail"
+          />
+        </div>
       </v-card-item>
 
       <v-card-actions>
-        <DeleteButton @on-confirm-delete="deleteTxt" />
+        <DeleteButton v-if="!!txtForEdition" @on-confirm-delete="deleteTxt" />
         <SubmitButton @on-click="handleSubmit" />
       </v-card-actions>
     </v-card>
