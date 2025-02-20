@@ -15,6 +15,7 @@
               v-model="data.emisorAccountType"
               :items="AccountTypes"
               :rules="validationRules.maxLength('senderAccountType')"
+              disabled
               item-title="description"
               item-value="value"
               label="Tipo de cuenta del emisor"
@@ -24,6 +25,7 @@
               v-model="data.emisorAccountNumber"
               :rules="validationRules.maxLength('senderAccountNumber')"
               label="Numero de cuenta del emisor"
+              disabled
               type="number"
             />
 
@@ -48,6 +50,7 @@
             <v-text-field
               v-model="data.amount"
               :rules="validationRules.maxLength('transactionAmount')"
+              @update:model-value="setIva"
               label="Monto a transferir"
               type="number"
             />
@@ -98,12 +101,7 @@
 
         <v-col cols="12" sm="4">
           <div class="flex-1 flex flex-col gap-2 py-1">
-            <v-text-field
-              v-model="iva"
-              :rules="validationRules.maxLength('vatTransactionAmount')"
-              disabled
-              label="IVA"
-            />
+            <v-text-field v-model="data.iva" disabled label="IVA" />
 
             <v-text-field
               v-model="data.reference"
@@ -113,7 +111,11 @@
 
             <v-text-field
               v-model="data.speiSpidReference"
-              :rules="validationRules.maxLength('speiSpidReference')"
+              :rules="[
+                FormRules.max_length(
+                  TransferLayout.detailRecord.speiSpidReference.length
+                ),
+              ]"
               label="Referencia SPEI / SPID"
               type="number"
             />
@@ -140,8 +142,8 @@
 <script lang="ts" setup>
 import { ref, watch, computed } from "vue";
 import { useToast } from "vue-toastification";
-import type { TxtDetail, DetailRecordKey } from "../../types";
-import { FormRules } from "../../helpers";
+import type { TxtDetail, DetailRecordKey } from "@/types";
+import { FormRules } from "@/helpers";
 import {
   AccountTypes,
   Banks,
@@ -149,8 +151,8 @@ import {
   OperationClasses,
   PaymentMethods,
   TransferLayout,
-} from "../../utils";
-import { TxtTypeEnum } from "../../enums";
+} from "@/utils";
+import { AccountTypeEnum, TxtTypeEnum } from "@/enums";
 
 const toast = useToast();
 const emits = defineEmits(["addDetail", "editDetail"]);
@@ -162,20 +164,11 @@ const data = ref<TxtDetail>({
   sequencyNumber: 2,
   filler: "000000000",
   amount: 0,
+  emisorAccountType: AccountTypeEnum.clabeAccount,
+  emisorAccountNumber: "030180900027236863",
 } as TxtDetail);
 
 const isEditing = computed(() => !!props.detailForEdition);
-const iva = computed({
-  get: () => {
-    const base = data.value.amount / 1.16;
-    const iva = base * 0.16;
-
-    return iva.toFixed(2);
-  },
-  set: (value) => {
-    data.value.iva = String(value);
-  },
-});
 
 const validationRules = {
   maxLength: (field: DetailRecordKey) => [
@@ -211,6 +204,13 @@ const handleSubmit = async () => {
   } else {
     toast.warning("El formulario no es válido. Por favor, revisa los campos.");
   }
+};
+
+const setIva = () => {
+  const base = data.value.amount / 1.16;
+  const iva = base * 0.16;
+
+  data.value.iva = iva.toFixed(2);
 };
 
 defineExpose({ form });

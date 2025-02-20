@@ -202,8 +202,8 @@ const getTxtDetailsContent = (txtDetails: TxtDetail[]) => {
       operationClass,
     } = detail;
 
-    const pad = (value: string | number, length: number) =>
-      String(value).padStart(length, "0");
+    const pad = (value: string | number, length: number, spaces?: boolean) =>
+      String(value).padStart(length, spaces ? " " : "0");
 
     const sequenceNumber = pad(
       index + 2,
@@ -214,7 +214,7 @@ const getTxtDetailsContent = (txtDetails: TxtDetail[]) => {
       TransferLayout.detailRecord.senderAccountNumber.length
     );
     const transactionAmount = pad(
-      amount,
+      String(amount).replace(".", ""),
       TransferLayout.detailRecord.transactionAmount.length
     );
     const applicationDate = aplicationDate.split("-").join("");
@@ -222,13 +222,22 @@ const getTxtDetailsContent = (txtDetails: TxtDetail[]) => {
       receiverAccountNumber,
       TransferLayout.detailRecord.receiverAccountNumber.length
     );
-    const aliasParsed = pad(alias, TransferLayout.detailRecord.alias.length);
+    const aliasParsed = pad(
+      alias,
+      TransferLayout.detailRecord.alias.length,
+      true
+    );
     const vatTransactionAmount = pad(
-      iva,
+      String(iva).replace(".", ""),
       TransferLayout.detailRecord.vatTransactionAmount.length
     );
+    const parsedReference = pad(
+      reference,
+      TransferLayout.detailRecord.reference.length,
+      true
+    );
     const speiSpidRef = pad(
-      speiSpidReference,
+      speiSpidReference ?? "",
       TransferLayout.detailRecord.speiSpidReference.length
     );
 
@@ -236,7 +245,7 @@ const getTxtDetailsContent = (txtDetails: TxtDetail[]) => {
       `${type}${sequenceNumber}${emisorAccountType}${senderAccountNumber}` +
       `${currencyCode}${receivingBank}${transactionAmount}${applicationDate}` +
       `${paymentMethod}${receiverAccountType}${receiverAccNumber}${filler}` +
-      `${aliasParsed}${vatTransactionAmount}${reference}${speiSpidRef}${operationClass}`
+      `${aliasParsed}${vatTransactionAmount}${parsedReference}${speiSpidRef}${operationClass}`
     );
   });
 };
@@ -257,7 +266,7 @@ const getTxtSummaryContent = (txt: Txt) => {
     TransferLayout.summary.numberOfTransactions.length
   );
   const totalTransactionAmountParsed = padWithZeros(
-    String(totalTransactionAmount),
+    String(totalTransactionAmount).replace(".", ""),
     TransferLayout.summary.totalTransactionAmount.length
   );
 

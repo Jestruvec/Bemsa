@@ -38,14 +38,14 @@ interface TxtDetail {
   type: TxtDetailTypeEnum;
   sequencyNumber: number;
   emisorAccountType: AccountTypeEnum;
-  emisorAccountNumber: number;
+  emisorAccountNumber: string;
   currencyCode: CurrencyCodeEnum;
   receivingBank: ReceivingBank;
   amount: number; // sin punto decimal, los ultimos 2 digitos son los decimales
   aplicationDate: string; // aaaammdd
   paymentMethod: PaymentMethodEnum;
   receiverAccountType: AccountTypeEnum;
-  receiverAccountNumber: number;
+  receiverAccountNumber: string;
   filler: string; // 9 ceros
   iva: string; // si no aplica, 15 de longitud
   reference: string;

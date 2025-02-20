@@ -41,15 +41,17 @@
           />
         </div>
 
-        <div
-          class="h-[15rem] mt-2 overflow-auto border rounded border-gray-300 border-dashed"
-        >
-          <TxtDetailList
-            :data="txt.details"
-            @select-detail="selectDetail"
-            @delete-detail="deleteDetail"
-          />
-        </div>
+        <template v-if="txt.details.length">
+          <div
+            class="max-h-[15rem] mt-2 overflow-auto border rounded border-gray-300 border-dashed"
+          >
+            <TxtDetailList
+              :data="txt.details"
+              @select-detail="selectDetail"
+              @delete-detail="deleteDetail"
+            />
+          </div>
+        </template>
       </v-card-item>
 
       <v-card-actions>
@@ -87,7 +89,7 @@ const txt = ref<Txt>({
   header: {
     type: TransferLayout.header.recordType.value,
     sequencyNumber: TransferLayout.header.sequenceNumber.value,
-    date: new Date().toISOString(),
+    date: new Date().toLocaleDateString("en-CA"),
     consecutive: TransferLayout.header.consecutive.value,
   },
   details: [] as TxtDetail[],
@@ -156,6 +158,7 @@ const handleSubmit = async () => {
 };
 const postTxt = () => {
   TxtArray.value.push(txt.value);
+  console.log(txt.value);
   toast.success("Txt creado correctamente");
   emits("onSubmit");
 };
