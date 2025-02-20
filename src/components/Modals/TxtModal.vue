@@ -82,7 +82,7 @@ const toast = useToast();
 const txt = ref<Txt>({
   id: crypto.randomUUID(),
   approved_at: "",
-  created_at: new Date().toISOString(),
+  created_at: new Date().toLocaleDateString("en-CA"),
   approved_by: Users[0],
   created_by: Users[1],
   status: TxtStatusEnum.waiting,
