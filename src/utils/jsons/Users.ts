@@ -1,6 +1,7 @@
-import type { User } from "../types";
+import { ref } from "vue";
+import type { User } from "@/types";
 
-export const Users: User[] = [
+export const Users = ref<User[]>([
   {
     id: "2",
     email: "johnwick@gmail.com",
@@ -80,4 +81,4 @@ export const Users: User[] = [
       permissions: [],
     },
   },
-];
+]);

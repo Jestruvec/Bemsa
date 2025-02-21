@@ -7,9 +7,9 @@ import {
   ReceivingBank,
   TxtStatusEnum,
   TxtTypeEnum,
-} from "../enums";
-import type { Txt } from "../types";
-import { Users } from "./";
+} from "@/enums";
+import type { Txt } from "@/types";
+import { Users } from "@/utils";
 
 export const TxtArray = ref<Txt[]>([
   {
@@ -19,7 +19,7 @@ export const TxtArray = ref<Txt[]>([
     description: `Test 1`,
     status: TxtStatusEnum.waiting,
     approved_by: null,
-    created_by: Users[2],
+    created_by: Users.value[2],
     header: {
       id: crypto.randomUUID(),
       type: TxtTypeEnum.HEADER,
@@ -62,7 +62,7 @@ export const TxtArray = ref<Txt[]>([
     description: `Test 2`,
     status: TxtStatusEnum.waiting,
     approved_by: null,
-    created_by: Users[2],
+    created_by: Users.value[2],
     header: {
       id: crypto.randomUUID(),
       type: TxtTypeEnum.HEADER,
@@ -104,8 +104,8 @@ export const TxtArray = ref<Txt[]>([
     created_at: "2025-02-12",
     description: `Test 3`,
     status: TxtStatusEnum.rejected,
-    approved_by: Users[3],
-    created_by: Users[2],
+    approved_by: Users.value[3],
+    created_by: Users.value[2],
     header: {
       id: crypto.randomUUID(),
       type: TxtTypeEnum.HEADER,
@@ -147,8 +147,8 @@ export const TxtArray = ref<Txt[]>([
     created_at: "2025-02-12",
     description: `Test 4`,
     status: TxtStatusEnum.aproved,
-    approved_by: Users[3],
-    created_by: Users[2],
+    approved_by: Users.value[3],
+    created_by: Users.value[2],
     header: {
       id: crypto.randomUUID(),
       type: TxtTypeEnum.HEADER,
@@ -190,8 +190,8 @@ export const TxtArray = ref<Txt[]>([
     created_at: "2025-02-12",
     description: `Test 5`,
     status: TxtStatusEnum.aproved,
-    approved_by: Users[3],
-    created_by: Users[2],
+    approved_by: Users.value[3],
+    created_by: Users.value[2],
     header: {
       id: crypto.randomUUID(),
       type: TxtTypeEnum.HEADER,

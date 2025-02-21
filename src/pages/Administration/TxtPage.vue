@@ -116,7 +116,7 @@ const updateTxtStatus = (newStatus: TxtStatusEnum) => {
   txtForUpdate.forEach((txt) => {
     txt.status = newStatus;
     txt.approved_at = new Date().toLocaleDateString("en-CA");
-    txt.approved_by = Users[3];
+    txt.approved_by = Users.value[3];
   });
 
   selectedTxtIds.value = [];

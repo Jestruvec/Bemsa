@@ -82,8 +82,8 @@ const txt = ref<Txt>({
   id: crypto.randomUUID(),
   approved_at: "",
   created_at: new Date().toLocaleDateString("en-CA"),
-  approved_by: Users[0],
-  created_by: Users[1],
+  approved_by: Users.value[0],
+  created_by: Users.value[1],
   status: TxtStatusEnum.waiting,
   header: {
     type: TransferLayout.header.recordType.value,
@@ -97,7 +97,6 @@ const txt = ref<Txt>({
   },
 } as Txt);
 const detailForEdition = ref<TxtDetail>();
-const e1 = ref(1);
 const form = ref();
 
 const detailForm = ref();
@@ -177,7 +176,6 @@ const deleteTxt = () => {
 
 defineExpose({
   resetForm: () => {
-    e1.value = 1;
     txt.value = {
       header: {
         type: TxtTypeEnum.HEADER,

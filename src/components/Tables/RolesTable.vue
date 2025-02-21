@@ -1,5 +1,5 @@
 <template>
-  <v-data-table-virtual :headers="headers" :items="roles" item-value="id">
+  <v-data-table-virtual :headers="headers" :items="RolesArray" item-value="id">
     <template #item="{ item }">
       <tr
         class="cursor-pointer"
@@ -8,7 +8,7 @@
       >
         <td>
           <div class="flex justify-center">
-            {{ item.role }}
+            {{ item.name }}
           </div>
         </td>
         <td>
@@ -28,6 +28,7 @@
 </template>
 
 <script lang="ts" setup>
+import { RolesArray } from "@/utils";
 import { useTheme } from "vuetify";
 
 defineEmits(["onRowClick"]);
@@ -36,16 +37,5 @@ const { current } = useTheme();
 const headers: any = [
   { title: "Rol", key: "role", align: "center" },
   { title: "Permisos", key: "permissions", align: "center" },
-];
-
-const roles = [
-  {
-    role: "Administrador",
-    permissions: ["Leer", "Crear", "Actualizar", "Borrar"],
-  },
-  {
-    role: "Dinamico",
-    permissions: ["Leer", "Crear"],
-  },
 ];
 </script>
