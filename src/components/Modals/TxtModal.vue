@@ -71,7 +71,7 @@ import {
   TxtDetailList,
 } from "@/components";
 import type { Txt, TxtDetail } from "@/types";
-import { TxtArray, TransferLayout, Users } from "@/utils";
+import { TransferLayout } from "@/utils";
 import { FormRules } from "@/helpers";
 import { TxtStatusEnum, TxtTypeEnum } from "@/enums";
 
@@ -82,8 +82,8 @@ const txt = ref<Txt>({
   id: crypto.randomUUID(),
   approved_at: "",
   created_at: new Date().toLocaleDateString("en-CA"),
-  approved_by: Users.value[0],
-  created_by: Users.value[1],
+  approved_by: null,
+  created_by: {},
   status: TxtStatusEnum.waiting,
   header: {
     type: TransferLayout.header.recordType.value,
@@ -121,9 +121,6 @@ watch(
 const getDetailIndex = (detail: TxtDetail) => {
   return txt.value.details.findIndex((e) => e.id === detail.id);
 };
-const getTxtIndex = (txt: Txt) => {
-  return TxtArray.value.findIndex((e) => e.id === txt.id);
-};
 
 const selectDetail = (detail: TxtDetail) => {
   detailForEdition.value = detail;
@@ -154,25 +151,9 @@ const handleSubmit = async () => {
     toast.warning("El formulario no es válido. Por favor, revisa los campos.");
   }
 };
-const postTxt = () => {
-  TxtArray.value.push(txt.value);
-  console.log(txt.value);
-  toast.success("Txt creado correctamente");
-  emits("onSubmit");
-};
-const putTxt = () => {
-  const txtIndex = getTxtIndex(txt.value);
-  TxtArray.value[txtIndex] = txt.value;
-  toast.success("Txt editado correctamente");
-  emits("onSubmit");
-};
-const deleteTxt = () => {
-  const txtIndex = getTxtIndex(txt.value);
-  TxtArray.value.splice(txtIndex, 1);
-
-  toast.success("Txt eliminado correctamente");
-  emits("onSubmit");
-};
+const postTxt = () => {};
+const putTxt = () => {};
+const deleteTxt = () => {};
 
 defineExpose({
   resetForm: () => {

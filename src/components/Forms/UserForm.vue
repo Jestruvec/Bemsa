@@ -56,7 +56,7 @@
       />
       <v-select
         v-model="data.roleId"
-        :items="RolesArray"
+        :items="roles"
         :rules="[FormRules.required]"
         prepend-inner-icon="mdi-account-cog"
         label="Rol"
@@ -69,12 +69,12 @@
 
 <script lang="ts" setup>
 import { watch, ref } from "vue";
-import { RolesArray } from "@/utils";
 import { FormRules } from "@/helpers";
-import type { User } from "@/types";
+import type { Role, User } from "@/types";
 
 const props = defineProps<{ modelValue: User }>();
 const emits = defineEmits(["update:modelValue"]);
+const roles = ref<Role[]>([]);
 const form = ref();
 const fileInput = ref();
 const data = ref<User>({ ...props.modelValue });

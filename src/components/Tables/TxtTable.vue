@@ -94,11 +94,11 @@
 
 <script lang="ts" setup>
 import { ref, watch, computed } from "vue";
-import { UserAvatar } from "..";
 import { useDisplay } from "vuetify";
-import { TxtStatusEnum } from "../../enums";
-import type { Txt, TxtDetail, TxtHeader } from "../../types";
-import { TransferLayout } from "../../utils";
+import type { Txt, TxtDetail, TxtHeader } from "@/types";
+import { UserAvatar } from "@/components";
+import { TransferLayout } from "@/utils";
+import { TxtStatusEnum } from "@/enums";
 
 const props = defineProps<{
   data: Txt[];

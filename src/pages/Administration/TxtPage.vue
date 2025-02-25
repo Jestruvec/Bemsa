@@ -57,7 +57,7 @@
       class="overflow-auto"
     >
       <TxtTable
-        :data="TxtArray"
+        :data="txts"
         :search="searchInput"
         :selected-txt-ids="selectedTxtIds"
         @on-row-click="openModalForEdition"
@@ -79,10 +79,10 @@ import {
   NewRegisterButton,
 } from "@/components";
 import type { Txt } from "@/types";
-import { TxtArray, Users } from "@/utils";
 import { TxtStatusEnum } from "@/enums";
 import { useNavDrawer } from "@/hooks";
 
+const txts = ref<Txt[]>([]);
 const searchInput = ref("");
 const txtForEdition = ref<Txt>();
 const selectedTxtIds = ref<string[]>([]);
@@ -109,15 +109,11 @@ const closeModal = () => {
 };
 
 const updateTxtStatus = (newStatus: TxtStatusEnum) => {
-  const txtForUpdate = TxtArray.value.filter((txt) =>
+  const txtForUpdate = txts.value.filter((txt) =>
     selectedTxtIds.value.includes(txt.id)
   );
 
-  txtForUpdate.forEach((txt) => {
-    txt.status = newStatus;
-    txt.approved_at = new Date().toLocaleDateString("en-CA");
-    txt.approved_by = Users.value[3];
-  });
+  console.log(txtForUpdate, newStatus);
 
   selectedTxtIds.value = [];
 };

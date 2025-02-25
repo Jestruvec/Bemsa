@@ -7,5 +7,5 @@
 </template>
 
 <script lang="ts" setup>
-import { LoginForm } from "../components";
+import { LoginForm } from "@/components";
 </script>

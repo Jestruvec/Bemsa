@@ -21,7 +21,6 @@ import { ref, watch } from "vue";
 import { useToast } from "vue-toastification";
 import { DeleteButton, SubmitButton, UserForm } from "@/components";
 import type { User } from "@/types";
-import { RolesArray, Users } from "@/utils";
 
 const toast = useToast();
 const props = defineProps<{ userForEdition?: User }>();
@@ -47,32 +46,9 @@ const handleSubmit = async () => {
     toast.warning("El formulario no es válido. Por favor, revisa los campos.");
   }
 };
-const postUser = () => {
-  const role = RolesArray.value.find((role) => role.id === user.value.roleId);
-
-  if (role) {
-    Users.value.push({ ...user.value, role });
-    toast.success("Usuario creado correctamente");
-    emits("onSubmit");
-  }
-};
-const putUser = () => {
-  const txtIndex = getUserIndex(user.value);
-  Users.value[txtIndex] = user.value;
-  toast.success("Usuario editado correctamente");
-  emits("onSubmit");
-};
-const deleteUser = () => {
-  const txtIndex = getUserIndex(user.value);
-  Users.value.splice(txtIndex, 1);
-
-  toast.success("Txt eliminado correctamente");
-  emits("onSubmit");
-};
-
-const getUserIndex = (user: User) => {
-  return Users.value.findIndex((e) => e.id === user.id);
-};
+const postUser = () => {};
+const putUser = () => {};
+const deleteUser = () => {};
 
 defineExpose({
   resetForm: () => {

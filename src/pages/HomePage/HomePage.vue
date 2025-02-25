@@ -7,5 +7,5 @@
 </template>
 
 <script lang="ts" setup>
-import webUnderConstruction from "../assets/images/webUnderConstruction.png";
+import { webUnderConstruction } from "@/assets/images";
 </script>

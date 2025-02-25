@@ -1,7 +1,7 @@
-import Home from "./HomePage.vue";
-import NotFound from "./NotFoundPage.vue";
-import Login from "./LoginPage.vue";
-import Settings from "./SettingsPage.vue";
+import Home from "./HomePage/HomePage.vue";
+import NotFound from "./NotFoundPage/NotFoundPage.vue";
+import Login from "./LoginPage/LoginPage.vue";
+import Settings from "./SettingsPage/SettingsPage.vue";
 
 import Roles from "./Administration/RolesPage.vue";
 import Users from "./Administration/UsersPage.vue";

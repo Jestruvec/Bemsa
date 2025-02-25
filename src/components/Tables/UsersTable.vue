@@ -1,5 +1,5 @@
 <template>
-  <v-data-table-virtual :headers="headers" :items="Users" item-value="id">
+  <v-data-table-virtual :headers="headers" :items="users" item-value="id">
     <template #item="{ item }">
       <tr
         class="cursor-pointer"
@@ -35,16 +35,17 @@
 </template>
 
 <script lang="ts" setup>
-import { computed } from "vue";
+import { computed, ref } from "vue";
 import { useDisplay, useTheme } from "vuetify";
-import { UserAvatar } from "..";
-import { Users } from "@/utils";
+import { UserAvatar } from "@/components";
+import type { User } from "@/types";
 
 const { mobile } = useDisplay();
 const { current } = useTheme();
 
 defineEmits(["onRowClick"]);
 
+const users = ref<User[]>([]);
 const headers = computed((): any[] => {
   return mobile.value
     ? [

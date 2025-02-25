@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { MainLayout } from "../components";
-import cheems from "../assets/images/cheems.png";
+import { MainLayout } from "@/components";
+import { cheems } from "@/assets/images";
 </script>
 
 <template>
