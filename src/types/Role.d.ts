@@ -1,8 +1,5 @@
-import type { RolePermission } from "./";
-
 export interface Role {
   id: string;
+  created_at: Date;
   name: string;
-  description: string;
-  permissions: RolePermission[];
 }

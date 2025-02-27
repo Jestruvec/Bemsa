@@ -1,7 +1,6 @@
 import type { User } from "./User";
-import type { Permission } from "./Permission";
 import type { Role } from "./Role";
-import type { RolePermission } from "./RolePermission";
+import type { Approval } from "./Approvals";
 import type {
   TxtDetail,
   Txt,
@@ -15,10 +14,9 @@ import type {
 
 export type {
   User,
+  Approval,
   Txt,
   Role,
-  Permission,
-  RolePermission,
   TxtDetail,
   TxtHeader,
   HeaderKey,

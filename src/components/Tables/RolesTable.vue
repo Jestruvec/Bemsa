@@ -1,5 +1,12 @@
 <template>
-  <v-data-table-virtual :headers="headers" :items="roles" item-value="id">
+  <v-data-table-virtual
+    :headers="headers"
+    :items="data"
+    item-value="id"
+    :search="search"
+    filter-mode="some"
+    hover
+  >
     <template #item="{ item }">
       <tr
         class="cursor-pointer"
@@ -11,17 +18,6 @@
             {{ item.name }}
           </div>
         </td>
-        <td>
-          <div class="flex justify-center">
-            <v-tooltip location="top" :text="item.permissions.join(', ')">
-              <template #activator="{ props }">
-                <span v-bind="props">
-                  {{ item.permissions.length }}
-                </span>
-              </template>
-            </v-tooltip>
-          </div>
-        </td>
       </tr>
     </template>
   </v-data-table-virtual>
@@ -29,15 +25,14 @@
 
 <script lang="ts" setup>
 import type { Role } from "@/types";
-import { ref } from "vue";
 import { useTheme } from "vuetify";
 
+defineProps<{
+  data: Role[];
+  search: string;
+}>();
 defineEmits(["onRowClick"]);
 const { current } = useTheme();
 
-const roles = ref<Role[]>([]);
-const headers: any = [
-  { title: "Rol", key: "role", align: "center" },
-  { title: "Permisos", key: "permissions", align: "center" },
-];
+const headers: any = [{ title: "Rol", key: "role", align: "center" }];
 </script>

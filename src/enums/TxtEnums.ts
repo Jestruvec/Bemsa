@@ -1,7 +1,7 @@
 export enum TxtStatusEnum {
-  aproved,
-  rejected,
-  waiting,
+  aproved = "0",
+  rejected = "1",
+  waiting = "2",
 }
 
 export enum TxtTypeEnum {

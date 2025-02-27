@@ -6,7 +6,7 @@
 
     <v-card>
       <v-list>
-        <v-list-item title="Conectado como" subtitle="Administrador" />
+        <v-list-item title="Conectado como" :subtitle="user.email" />
 
         <v-list-item
           v-for="item in userMenuItems"
@@ -23,6 +23,7 @@
 <script lang="ts" setup>
 import { ref } from "vue";
 import { useRouter } from "vue-router";
+import { useAuth } from "@/composables";
 
 interface UserMenuItem {
   id: string;
@@ -32,6 +33,7 @@ interface UserMenuItem {
 }
 
 const router = useRouter();
+const { logout, user } = useAuth();
 
 const userMenuItems = ref<UserMenuItem[]>([
   {
@@ -42,14 +44,12 @@ const userMenuItems = ref<UserMenuItem[]>([
   },
   {
     id: crypto.randomUUID(),
-    description: "Cerrar sesion",
+    description: "Cerrar sesión",
     icon: "mdi-logout",
-    fn: () => logout(),
+    fn: async () => {
+      await logout();
+      router.push("/login");
+    },
   },
 ]);
-
-const logout = () => {
-  console.log("cerrar sesion");
-  router.push("/login");
-};
 </script>

@@ -3,7 +3,7 @@
     v-model="localSelectedTxtIds"
     :headers="headers"
     :items="data"
-    show-select
+    :show-select="isAdmin"
     :search="search"
     filter-mode="some"
     hover
@@ -13,7 +13,7 @@
   >
     <template #item="{ item }">
       <tr class="cursor-pointer" @click="$emit('onRowClick', item)">
-        <td>
+        <td v-if="isAdmin">
           <v-checkbox
             v-model="localSelectedTxtIds"
             :value="item.id"
@@ -38,19 +38,23 @@
 
         <td :class="{ hidden: mobile }">
           <div class="flex justify-center items-center gap-4">
-            <UserAvatar class="flex-1" :user="item.created_by" />
+            <UserAvatar class="flex-1" :user="item.user_profiles" />
             <span class="flex-1">
-              {{ `${item.created_by.name} ${item.created_by.lastName}` }}
+              {{
+                `${item.user_profiles?.name} ${item.user_profiles?.lastName}`
+              }}
             </span>
           </div>
         </td>
 
         <td :class="{ hidden: mobile }">
           <div class="flex justify-center items-center gap-4">
-            <template v-if="item.approved_by">
-              <UserAvatar class="flex-1" :user="item.approved_by" />
+            <template v-if="item.approvals">
+              <UserAvatar class="flex-1" :user="item.approvals.user_profiles" />
               <span class="flex-1">
-                {{ `${item.approved_by.name} ${item.approved_by.lastName}` }}
+                {{
+                  `${item.approvals.user_profiles.name} ${item.approvals.user_profiles.lastName}`
+                }}
               </span>
             </template>
 
@@ -62,15 +66,20 @@
 
         <td :class="{ hidden: mobile }">
           <div class="flex justify-center">
-            {{ item.created_at }}
+            {{ new Date(item.created_at).toLocaleString() }}
           </div>
         </td>
 
         <td :class="{ hidden: mobile }">
           <div class="flex justify-center">
-            <span>
-              {{ item.approved_at || "N/A" }}
-            </span>
+            <template v-if="item.approvals">
+              <span>
+                {{ new Date(item.approvals.created_at).toLocaleString() }}
+              </span>
+            </template>
+            <template v-else>
+              <span> N/A </span>
+            </template>
           </div>
         </td>
 
@@ -104,6 +113,7 @@ const props = defineProps<{
   data: Txt[];
   selectedTxtIds: string[];
   search: string;
+  isAdmin: boolean;
 }>();
 defineEmits(["onRowClick", "onRowCheck", "onCheckAll"]);
 
@@ -144,13 +154,12 @@ watch(
 );
 
 const getStatusData = (txt: Txt) => {
-  switch (txt.status) {
-    case TxtStatusEnum.aproved:
-      return { color: "success", text: "Aprobado" };
-    case TxtStatusEnum.rejected:
-      return { color: "error", text: "No aprobado" };
-    default:
-      return { color: "warning", text: "Esperando" };
+  if (txt.approvals?.status === TxtStatusEnum.aproved) {
+    return { color: "success", text: "Aprobado" };
+  } else if (txt.approvals?.status === TxtStatusEnum.rejected) {
+    return { color: "error", text: "No aprobado" };
+  } else {
+    return { color: "warning", text: "Esperando" };
   }
 };
 
@@ -169,8 +178,8 @@ const downloadTxt = (txt: Txt) => {
 
 const getTxtContent = (txt: Txt) => {
   const content: string[] = [];
-  const header = getTxtHeaderContent(txt.header);
-  const details = getTxtDetailsContent(txt.details);
+  const header = getTxtHeaderContent(txt.txt_headers);
+  const details = getTxtDetailsContent(txt.txt_details);
   const summary = getTxtSummaryContent(txt);
   content.push(header);
   details.forEach((detail) => content.push(detail));
@@ -178,8 +187,11 @@ const getTxtContent = (txt: Txt) => {
   return content.join("\n");
 };
 const getTxtHeaderContent = (txtHeader: TxtHeader) => {
-  const { type, sequencyNumber, date, consecutive } = txtHeader;
-  return `${type}${sequencyNumber}${date.split("-").join("")}${consecutive}`;
+  const { type, sequenceNumber, date, consecutive } = txtHeader;
+  return `${type}${sequenceNumber}${date
+    .split("T")[0]
+    .split("-")
+    .join("")}${consecutive}`;
 };
 const getTxtDetailsContent = (txtDetails: TxtDetail[]) => {
   return txtDetails.map((detail, index) => {
@@ -245,14 +257,14 @@ const getTxtDetailsContent = (txtDetails: TxtDetail[]) => {
       `${type}${sequenceNumber}${emisorAccountType}${senderAccountNumber}` +
       `${currencyCode}${receivingBank}${transactionAmount}${applicationDate}` +
       `${paymentMethod}${receiverAccountType}${receiverAccNumber}${filler}` +
-      `${aliasParsed}${vatTransactionAmount}${parsedReference}${speiSpidRef}${operationClass}`
+      `${aliasParsed}aqui${vatTransactionAmount}aqui${parsedReference}${speiSpidRef}${operationClass}`
     );
   });
 };
 const getTxtSummaryContent = (txt: Txt) => {
-  const { details, summary } = txt;
-  const detailsLength = details.length;
-  const totalTransactionAmount = details.reduce(
+  const { txt_details, txt_summaries } = txt;
+  const detailsLength = txt_details.length;
+  const totalTransactionAmount = txt_details.reduce(
     (acc, detail) => acc + detail.amount,
     0
   );
@@ -270,7 +282,7 @@ const getTxtSummaryContent = (txt: Txt) => {
     TransferLayout.summary.totalTransactionAmount.length
   );
 
-  return `${summary.type}${sequenceNumber}${numberOfTransactions}${totalTransactionAmountParsed}`;
+  return `${txt_summaries.type}${sequenceNumber}${numberOfTransactions}${totalTransactionAmountParsed}`;
 };
 const padWithZeros = (str: string, length: number) => {
   return str.padStart(length, "0");

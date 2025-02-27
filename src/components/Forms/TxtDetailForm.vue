@@ -2,6 +2,7 @@
   <v-form
     ref="form"
     validate-on="submit"
+    :disabled="loading"
     @submit.prevent
     @submit="handleSubmit"
   >
@@ -129,7 +130,7 @@
               label="Clasificacion de la operacion"
             />
 
-            <v-btn type="submit">
+            <v-btn type="submit" :disabled="loading">
               {{ isEditing ? "Guardar" : "Agregar" }}
             </v-btn>
           </div>
@@ -152,20 +153,36 @@ import {
   PaymentMethods,
   TransferLayout,
 } from "@/utils";
-import { AccountTypeEnum, TxtTypeEnum } from "@/enums";
+import {
+  AccountTypeEnum,
+  CurrencyCodeEnum,
+  OperationClassEnum,
+  PaymentMethodEnum,
+  ReceivingBank,
+  TxtTypeEnum,
+} from "@/enums";
 
 const toast = useToast();
 const emits = defineEmits(["addDetail", "editDetail"]);
-const props = defineProps<{ detailForEdition?: TxtDetail }>();
+const props = defineProps<{ detailForEdition?: TxtDetail; loading: boolean }>();
 const form = ref();
 const data = ref<TxtDetail>({
-  id: crypto.randomUUID(),
   type: TxtTypeEnum.DETAIL,
-  sequencyNumber: 2,
+  sequenceNumber: 2,
   filler: "000000000",
-  amount: 0,
+  amount: 1,
   emisorAccountType: AccountTypeEnum.clabeAccount,
   emisorAccountNumber: "030180900027236863",
+
+  alias: "tuki",
+  currencyCode: CurrencyCodeEnum.dolar,
+  operationClass: OperationClassEnum.loan_granting,
+  paymentMethod: PaymentMethodEnum.BCO,
+  receivingBank: ReceivingBank.ABC_CAPITAL,
+  receiverAccountType: AccountTypeEnum.checkingAccount,
+  reference: "reference",
+  speiSpidReference: 123,
+  receiverAccountNumber: "1234123412341234",
 } as TxtDetail);
 
 const isEditing = computed(() => !!props.detailForEdition);
@@ -195,11 +212,22 @@ const handleSubmit = async () => {
       : emits("addDetail", data.value);
 
     data.value = {
-      id: crypto.randomUUID(),
-      type: "02",
-      sequencyNumber: 2,
+      type: TxtTypeEnum.DETAIL,
+      sequenceNumber: 2,
       filler: "000000000",
       amount: 0,
+      emisorAccountType: AccountTypeEnum.clabeAccount,
+      emisorAccountNumber: "030180900027236863",
+
+      alias: "tuki",
+      currencyCode: CurrencyCodeEnum.dolar,
+      operationClass: OperationClassEnum.loan_granting,
+      paymentMethod: PaymentMethodEnum.BCO,
+      receivingBank: ReceivingBank.ABC_CAPITAL,
+      receiverAccountType: AccountTypeEnum.checkingAccount,
+      reference: "reference",
+      speiSpidReference: 123,
+      receiverAccountNumber: "1234123412341234",
     } as TxtDetail;
   } else {
     toast.warning("El formulario no es válido. Por favor, revisa los campos.");

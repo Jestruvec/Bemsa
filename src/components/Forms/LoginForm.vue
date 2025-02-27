@@ -9,8 +9,8 @@
     <div class="flex flex-col gap-4 pa-4">
       <h1>Iniciar sesion en PLATFORM_NAME</h1>
       <v-text-field
-        v-model="username"
-        label="Usuario"
+        v-model="email"
+        label="Correo electronico"
         prepend-inner-icon="mdi-account"
         :rules="[FormRules.required]"
       />
@@ -39,52 +39,37 @@
 
 <script lang="ts" setup>
 import { ref } from "vue";
+import { useRouter } from "vue-router";
 import { useToast } from "vue-toastification";
-import { FormRules } from "../../helpers/FormRules";
+import { FormRules } from "@/helpers/FormRules";
+import { useAuth } from "@/composables";
 
+const router = useRouter();
 const toast = useToast();
 const emits = defineEmits(["onLoginSuccesfully"]);
+const { loading, error, login } = useAuth();
 const form = ref();
-const username = ref();
-const password = ref();
+const email = ref("jhonnyestruve@gmail.com");
+const password = ref("123");
 const showPassword = ref(false);
-const loading = ref(false);
-const error = ref<string | null>(null);
 
 const handleSubmit = async () => {
   const formIsValid = await validateForm();
 
   if (formIsValid) {
-    try {
-      loading.value = true;
-      error.value = null;
+    await login(email.value, password.value);
 
-      const loginResponse = await login();
-      console.log(loginResponse);
-      emits("onLoginSuccesfully", loginResponse);
-    } catch (err) {
-      error.value = err as string;
+    if (error.value) {
       toast.error(error.value);
-    } finally {
-      loading.value = false;
+      return;
     }
+
+    router.push("/home");
   }
 };
 
 const validateForm = async () => {
   const { valid } = await form.value.validate();
   return valid as boolean;
-};
-
-const login = async (): Promise<{ username: string; token: string }> => {
-  return new Promise((resolve, reject) => {
-    setTimeout(() => {
-      if (username.value === "admin" && password.value === "123") {
-        resolve({ username: username.value, token: crypto.randomUUID() });
-      } else {
-        reject("Credenciales invalidas");
-      }
-    }, 1000);
-  });
 };
 </script>

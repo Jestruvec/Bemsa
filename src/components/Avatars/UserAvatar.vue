@@ -1,23 +1,20 @@
 <template>
-  <template v-if="user.imgUrl">
+  <template v-if="user.avatarUrl">
     <v-avatar
-      :image="user.imgUrl"
-      :color="user.role.name.includes('Admin') ? '#FFD700' : 'primary'"
+      :image="user.avatarUrl"
+      :color="user.roles?.name === 'admin' ? '#FFD700' : 'primary'"
     />
   </template>
 
   <template v-else>
-    <v-avatar
-      :image="user.imgUrl"
-      :color="user.role.name.includes('Admin') ? '#FFD700' : 'primary'"
-    >
+    <v-avatar :color="user.roles?.name === 'admin' ? '#FFD700' : 'primary'">
       {{ getInitials(user.name) }}
     </v-avatar>
   </template>
 </template>
 
 <script lang="ts" setup>
-import type { User } from "../../types";
+import type { User } from "@/types";
 
 defineProps<{ user: User }>();
 

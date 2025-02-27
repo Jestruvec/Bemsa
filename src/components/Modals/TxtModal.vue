@@ -7,7 +7,7 @@
       <v-card-item>
         <div class="flex gap-2 mt-2 px-2">
           <div class="flex-1">
-            <v-form ref="form">
+            <v-form ref="form" :disabled="loading">
               <v-text-field
                 v-model="txt.description"
                 label="Descripcion"
@@ -20,7 +20,9 @@
           <div class="flex-1 flex items-end flex-col justify-end">
             <div>
               <span class="text-xs">Total de operaciones: </span>
-              <span class="font-bold text-xs">{{ txt.details.length }}</span>
+              <span class="font-bold text-xs">{{
+                txt.txt_details?.length
+              }}</span>
             </div>
 
             <div>
@@ -36,17 +38,19 @@
           <TxtDetailForm
             ref="detailForm"
             :detail-for-edition="detailForEdition"
+            :loading="loading"
             @add-detail="addDetail"
             @edit-detail="editDetail"
           />
         </div>
 
         <div
-          v-if="txt.details.length"
+          v-if="txt.txt_details?.length"
           class="max-h-[15rem] mt-2 overflow-auto border rounded border-gray-300 border-dashed"
         >
           <TxtDetailList
-            :data="txt.details"
+            :data="txt.txt_details"
+            :loading="loading"
             @select-detail="selectDetail"
             @delete-detail="deleteDetail"
           />
@@ -54,8 +58,12 @@
       </v-card-item>
 
       <v-card-actions>
-        <DeleteButton v-if="!!txtForEdition" @on-confirm-delete="deleteTxt" />
-        <SubmitButton @on-click="handleSubmit" />
+        <DeleteButton
+          v-if="!!txtForEdition"
+          :disabled="loading"
+          @on-confirm-delete="deleteTxt"
+        />
+        <SubmitButton @on-click="handleSubmit" :disabled="loading" />
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -73,36 +81,35 @@ import {
 import type { Txt, TxtDetail } from "@/types";
 import { TransferLayout } from "@/utils";
 import { FormRules } from "@/helpers";
-import { TxtStatusEnum, TxtTypeEnum } from "@/enums";
+import { useAuth, useTxtDetailsCrud, useTxtsCrud } from "@/composables";
+
+const { user } = useAuth();
+const { deleteTxtDetail } = useTxtDetailsCrud();
+const { loading, error, post, put, remove } = useTxtsCrud();
 
 const props = defineProps<{ txtForEdition?: Txt }>();
 const emits = defineEmits(["onSubmit"]);
 const toast = useToast();
 const txt = ref<Txt>({
-  id: crypto.randomUUID(),
-  approved_at: "",
-  created_at: new Date().toLocaleDateString("en-CA"),
-  approved_by: null,
-  created_by: {},
-  status: TxtStatusEnum.waiting,
-  header: {
+  description: "",
+  userId: user.value.id,
+  txt_headers: {
     type: TransferLayout.header.recordType.value,
-    sequencyNumber: TransferLayout.header.sequenceNumber.value,
-    date: new Date().toLocaleDateString("en-CA"),
+    sequenceNumber: TransferLayout.header.sequenceNumber.value,
+    date: new Date().toDateString(),
     consecutive: TransferLayout.header.consecutive.value,
   },
-  details: [] as TxtDetail[],
-  summary: {
+  txt_details: [] as TxtDetail[],
+  txt_summaries: {
     type: TransferLayout.summary.recordType.value,
   },
 } as Txt);
 const detailForEdition = ref<TxtDetail>();
 const form = ref();
-
 const detailForm = ref();
 
 const totalAmount = computed(() =>
-  txt.value.details.reduce((acc, detail) => {
+  txt.value.txt_details?.reduce((acc, detail) => {
     acc += detail.amount;
 
     return acc;
@@ -118,32 +125,55 @@ watch(
   }
 );
 
-const getDetailIndex = (detail: TxtDetail) => {
-  return txt.value.details.findIndex((e) => e.id === detail.id);
-};
-
 const selectDetail = (detail: TxtDetail) => {
   detailForEdition.value = detail;
 };
 const addDetail = (detail: TxtDetail) => {
-  txt.value.details.push(detail);
+  txt.value.txt_details?.push(detail);
 };
 const editDetail = (detail: TxtDetail) => {
-  const index = getDetailIndex(detail);
-  txt.value.details[index] = detail;
-  detailForEdition.value = undefined;
+  const index = txt.value.txt_details.findIndex((e) => e.id === detail.id);
+
+  if (txt.value.txt_details && index >= 0) {
+    txt.value.txt_details[index] = detail;
+    detailForEdition.value = undefined;
+  }
 };
-const deleteDetail = (detail: TxtDetail) => {
-  const index = getDetailIndex(detail);
-  txt.value.details.splice(index, 1);
+const deleteDetail = async (detail: TxtDetail) => {
+  await deleteTxtDetail(detail.id);
+
+  txt.value.txt_details = txt.value.txt_details.filter(
+    (e) => e.id !== detail.id
+  );
 };
 
 const handleSubmit = async () => {
   const { valid } = await form.value.validate();
 
   if (valid) {
-    if (txt.value.details.length) {
-      props.txtForEdition ? putTxt() : postTxt();
+    if (txt.value.txt_details?.length) {
+      txt.value.txt_summaries = {
+        ...txt.value.txt_summaries,
+        totalOperations: txt.value.txt_details.length,
+        totalOperationsAmount: totalAmount.value,
+        sequenceNumber: txt.value.txt_details.length + 2,
+      };
+
+      props.txtForEdition
+        ? await put(txt.value.id, txt.value)
+        : await post(txt.value);
+
+      if (error.value) {
+        toast.error(error.value);
+        return;
+      }
+
+      emits("onSubmit");
+      toast.success(
+        props.txtForEdition
+          ? "Txt editado correctamente"
+          : "Txt creado correctamente"
+      );
     } else {
       toast.warning("Agregue al menos un detalle para contiunar.");
     }
@@ -151,21 +181,32 @@ const handleSubmit = async () => {
     toast.warning("El formulario no es válido. Por favor, revisa los campos.");
   }
 };
-const postTxt = () => {};
-const putTxt = () => {};
-const deleteTxt = () => {};
+const deleteTxt = async () => {
+  await remove(txt.value.id);
+
+  if (error.value) {
+    toast.error(error.value);
+    return;
+  }
+
+  toast.success("Txt eliminado correctamente");
+  emits("onSubmit");
+};
 
 defineExpose({
   resetForm: () => {
     txt.value = {
-      header: {
-        type: TxtTypeEnum.HEADER,
-        sequencyNumber: "0000001",
-        consecutive: "000",
+      description: "",
+      userId: user.value.id,
+      txt_headers: {
+        type: TransferLayout.header.recordType.value,
+        sequenceNumber: TransferLayout.header.sequenceNumber.value,
+        date: new Date().toISOString(),
+        consecutive: TransferLayout.header.consecutive.value,
       },
-      details: [] as TxtDetail[],
-      summary: {
-        type: TxtTypeEnum.SUMMARY,
+      txt_details: [] as TxtDetail[],
+      txt_summaries: {
+        type: TransferLayout.summary.recordType.value,
       },
     } as Txt;
   },

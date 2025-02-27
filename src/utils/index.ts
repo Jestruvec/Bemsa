@@ -6,8 +6,10 @@ import { OperationClasses } from "./OperationClasses";
 import { PaymentMethods } from "./PaymentMethods";
 import { TransferLayout } from "./TransferLayout";
 import { supabase } from "./supabase";
+import { tableNames } from "./TableNames";
 
 export {
+  tableNames,
   supabase,
   AccountTypes,
   UserSystemModules,

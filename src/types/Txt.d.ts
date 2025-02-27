@@ -1,5 +1,4 @@
 import {
-  TxtStatusEnum,
   AccountTypeEnum,
   TxtDetailTypeEnum,
   TxtTypeEnum,
@@ -8,35 +7,34 @@ import {
   OperationClassEnum,
   PaymentMethodEnum,
   ReceivingBank,
-} from "../enums";
-import type { User } from "./";
+} from "@/enums";
+import { Approval, User } from "@/types";
 
 export interface Txt {
   id: string;
-  description: string;
-  status: TxtStatusEnum;
   created_at: string;
-  approved_at: string | null;
-  header: TxtHeader;
-  details: TxtDetail[];
-  summary: TxtSummary;
-  created_by: User;
-  approved_by: User | null;
+  description: string;
+  userId: string;
+  txt_headers: TxtHeader;
+  txt_details: TxtDetail[];
+  txt_summaries: TxtSummary;
+  user_profiles: User;
+  approvals?: Approval;
 }
 
 interface TxtHeader {
   id: string;
   type: TxtTypeEnum;
-  sequencyNumber: string;
-  date: string; // Mantengo string si el backend lo espera en AAAAMMDD
-  consecutive: string; // Se mantiene como string para formateo
+  sequenceNumber: string;
+  date: string;
+  consecutive: string;
 }
 
 interface TxtDetail {
   id: string;
   alias: string; // maximo 15 caracteres
   type: TxtDetailTypeEnum;
-  sequencyNumber: number;
+  sequenceNumber: number;
   emisorAccountType: AccountTypeEnum;
   emisorAccountNumber: string;
   currencyCode: CurrencyCodeEnum;
@@ -51,13 +49,14 @@ interface TxtDetail {
   reference: string;
   speiSpidReference: number;
   operationClass: OperationClassEnum;
+  txtId: string;
 }
 
 interface TxtSummary {
   id: string;
   type: TxtSummaryTypeEnum;
-  sequencyNumber: number;
-  numberOfOperations: number;
+  sequenceNumber: number;
+  totalOperations: number;
   totalOperationsAmount: number;
 }
 

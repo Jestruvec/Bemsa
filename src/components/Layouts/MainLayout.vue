@@ -1,6 +1,6 @@
 <template>
   <v-layout>
-    <MainHeader @toggle-nav-drawer="showNavDrawer = !showNavDrawer" />
+    <MainHeader @toggle-nav-drawer="toggleNavDrawer" />
 
     <MainSidebar v-model="showNavDrawer" />
 
@@ -12,7 +12,7 @@
 
 <script lang="ts" setup>
 import { MainHeader, MainSidebar } from "@/components";
-import { useNavDrawer } from "@/hooks";
+import { useNavDrawer } from "@/composables";
 
-const { showNavDrawer } = useNavDrawer();
+const { showNavDrawer, toggleNavDrawer } = useNavDrawer();
 </script>

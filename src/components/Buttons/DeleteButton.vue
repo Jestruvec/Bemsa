@@ -8,7 +8,7 @@
 </template>
 
 <script lang="ts" setup>
-import { useSweetAlert } from "@/hooks";
+import { useSweetAlert } from "@/composables";
 
 defineProps<{ hideBtnTxt?: boolean }>();
 const emits = defineEmits(["onConfirmDelete"]);

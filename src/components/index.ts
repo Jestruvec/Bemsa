@@ -13,9 +13,7 @@ import TxtModal from "./Modals/TxtModal.vue";
 
 import LoginForm from "./Forms/LoginForm.vue";
 import UserForm from "./Forms/UserForm.vue";
-import TxtHeaderForm from "./Forms/TxtHeaderForm.vue";
 import TxtDetailForm from "./Forms/TxtDetailForm.vue";
-import TxtSummaryForm from "./Forms/TxtSummaryForm.vue";
 
 import TxtDetailList from "./Lists/TxtDetailList.vue";
 
@@ -33,19 +31,17 @@ export {
   UserForm,
   LoginForm,
   MainLayout,
+  RolesTable,
   MainHeader,
   MainSidebar,
   UsersTable,
-  RolesTable,
   TxtTable,
   UserMenu,
   RoleModal,
   UserModal,
   TxtModal,
   UserAvatar,
-  TxtHeaderForm,
   TxtDetailForm,
-  TxtSummaryForm,
   TxtDetailList,
   SearchBar,
   TooltipButton,

@@ -1,5 +1,5 @@
 <template>
-  <v-list>
+  <v-list :disabled="loading">
     <v-list-item>
       <SearchBar @update="updateSearchQuery" variant="underlined" />
     </v-list-item>
@@ -39,7 +39,7 @@ import { AccountTypeEnum } from "@/enums";
 import type { TxtDetail } from "@/types";
 import { SearchBar, DeleteButton } from "@/components";
 
-const props = defineProps<{ data: TxtDetail[] }>();
+const props = defineProps<{ data: TxtDetail[]; loading: boolean }>();
 const emits = defineEmits(["selectDetail", "deleteDetail"]);
 
 const searchQuery = ref("");
