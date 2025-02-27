@@ -48,7 +48,8 @@ export const useTxtsCrud = () => {
           filler,
           reference,
           speiSpidReference,
-          operationClass
+          operationClass,
+          iva
         ),
         approvals (
           id,
@@ -74,6 +75,7 @@ export const useTxtsCrud = () => {
       error.value = err.message;
     } finally {
       loading.value = false;
+      console.log("object");
     }
   };
 

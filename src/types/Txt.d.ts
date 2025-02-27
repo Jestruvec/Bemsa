@@ -45,7 +45,7 @@ interface TxtDetail {
   receiverAccountType: AccountTypeEnum;
   receiverAccountNumber: string;
   filler: string; // 9 ceros
-  iva: string; // si no aplica, 15 de longitud
+  iva: number; // si no aplica, 15 de longitud
   reference: string;
   speiSpidReference: number;
   operationClass: OperationClassEnum;

@@ -102,7 +102,12 @@
 
         <v-col cols="12" sm="4">
           <div class="flex-1 flex flex-col gap-2 py-1">
-            <v-text-field v-model="data.iva" disabled label="IVA" />
+            <v-text-field
+              v-model="data.iva"
+              type="number"
+              disabled
+              label="IVA"
+            />
 
             <v-text-field
               v-model="data.reference"
@@ -153,14 +158,7 @@ import {
   PaymentMethods,
   TransferLayout,
 } from "@/utils";
-import {
-  AccountTypeEnum,
-  CurrencyCodeEnum,
-  OperationClassEnum,
-  PaymentMethodEnum,
-  ReceivingBank,
-  TxtTypeEnum,
-} from "@/enums";
+import { AccountTypeEnum, TxtTypeEnum } from "@/enums";
 
 const toast = useToast();
 const emits = defineEmits(["addDetail", "editDetail"]);
@@ -170,19 +168,8 @@ const data = ref<TxtDetail>({
   type: TxtTypeEnum.DETAIL,
   sequenceNumber: 2,
   filler: "000000000",
-  amount: 1,
   emisorAccountType: AccountTypeEnum.clabeAccount,
   emisorAccountNumber: "030180900027236863",
-
-  alias: "tuki",
-  currencyCode: CurrencyCodeEnum.dolar,
-  operationClass: OperationClassEnum.loan_granting,
-  paymentMethod: PaymentMethodEnum.BCO,
-  receivingBank: ReceivingBank.ABC_CAPITAL,
-  receiverAccountType: AccountTypeEnum.checkingAccount,
-  reference: "reference",
-  speiSpidReference: 123,
-  receiverAccountNumber: "1234123412341234",
 } as TxtDetail);
 
 const isEditing = computed(() => !!props.detailForEdition);
@@ -198,7 +185,10 @@ watch(
   () => props.detailForEdition,
   (newValue) => {
     if (newValue) {
-      data.value = { ...newValue };
+      data.value = {
+        ...newValue,
+        aplicationDate: newValue.aplicationDate.split("T")[0],
+      };
     }
   }
 );
@@ -218,16 +208,6 @@ const handleSubmit = async () => {
       amount: 0,
       emisorAccountType: AccountTypeEnum.clabeAccount,
       emisorAccountNumber: "030180900027236863",
-
-      alias: "tuki",
-      currencyCode: CurrencyCodeEnum.dolar,
-      operationClass: OperationClassEnum.loan_granting,
-      paymentMethod: PaymentMethodEnum.BCO,
-      receivingBank: ReceivingBank.ABC_CAPITAL,
-      receiverAccountType: AccountTypeEnum.checkingAccount,
-      reference: "reference",
-      speiSpidReference: 123,
-      receiverAccountNumber: "1234123412341234",
     } as TxtDetail;
   } else {
     toast.warning("El formulario no es válido. Por favor, revisa los campos.");
@@ -235,10 +215,11 @@ const handleSubmit = async () => {
 };
 
 const setIva = () => {
-  const base = data.value.amount / 1.16;
+  const amount = data.value.amount / 100;
+  const base = amount / 1.16;
   const iva = base * 0.16;
 
-  data.value.iva = iva.toFixed(2);
+  data.value.iva = Number(iva.toFixed(2));
 };
 
 defineExpose({ form });

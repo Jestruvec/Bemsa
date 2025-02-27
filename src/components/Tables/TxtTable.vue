@@ -208,7 +208,7 @@ const getTxtDetailsContent = (txtDetails: TxtDetail[]) => {
       receiverAccountNumber,
       filler,
       alias,
-      iva,
+      // iva,
       reference,
       speiSpidReference,
       operationClass,
@@ -229,7 +229,7 @@ const getTxtDetailsContent = (txtDetails: TxtDetail[]) => {
       String(amount).replace(".", ""),
       TransferLayout.detailRecord.transactionAmount.length
     );
-    const applicationDate = aplicationDate.split("-").join("");
+    const applicationDate = aplicationDate.split("T")[0].split("-").join("");
     const receiverAccNumber = pad(
       receiverAccountNumber,
       TransferLayout.detailRecord.receiverAccountNumber.length
@@ -240,7 +240,7 @@ const getTxtDetailsContent = (txtDetails: TxtDetail[]) => {
       true
     );
     const vatTransactionAmount = pad(
-      String(iva).replace(".", ""),
+      String(0).replace(".", ""),
       TransferLayout.detailRecord.vatTransactionAmount.length
     );
     const parsedReference = pad(
@@ -257,7 +257,7 @@ const getTxtDetailsContent = (txtDetails: TxtDetail[]) => {
       `${type}${sequenceNumber}${emisorAccountType}${senderAccountNumber}` +
       `${currencyCode}${receivingBank}${transactionAmount}${applicationDate}` +
       `${paymentMethod}${receiverAccountType}${receiverAccNumber}${filler}` +
-      `${aliasParsed}aqui${vatTransactionAmount}aqui${parsedReference}${speiSpidRef}${operationClass}`
+      `${aliasParsed}${vatTransactionAmount}${parsedReference}${speiSpidRef}${operationClass}`
     );
   });
 };

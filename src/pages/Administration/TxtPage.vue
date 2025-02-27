@@ -23,7 +23,7 @@
           <NewRegisterButton @on-click="showModal = true" />
 
           <div
-            class="sm:w-40 bg-surface"
+            class="sm:w-80 bg-surface"
             :class="selectedTxtIds.length ? ['w-28'] : ['w-60']"
           >
             <SearchBar
@@ -146,6 +146,7 @@ const updateTxtStatus = async (newStatus: TxtStatusEnum) => {
     }
 
     fetch();
+    selectedTxtIds.value = [];
   }
 };
 
@@ -155,8 +156,8 @@ const updateData = async () => {
 };
 
 onMounted(async () => {
+  fetch();
   await fetchUserProfileById(user.value.id);
   isAdmin.value = userProfile.value[0].roles.name === "admin";
-  fetch();
 });
 </script>

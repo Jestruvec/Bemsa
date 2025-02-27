@@ -49,8 +49,8 @@ const toast = useToast();
 const emits = defineEmits(["onLoginSuccesfully"]);
 const { loading, error, login } = useAuth();
 const form = ref();
-const email = ref("jhonnyestruve@gmail.com");
-const password = ref("123");
+const email = ref("");
+const password = ref("");
 const showPassword = ref(false);
 
 const handleSubmit = async () => {

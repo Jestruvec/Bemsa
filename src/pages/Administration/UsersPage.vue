@@ -21,7 +21,7 @@
       <div class="flex gap-1 sm:gap-2 w-100 mb-4">
         <NewRegisterButton @on-click="showModal = true" />
 
-        <div class="sm:w-40 bg-surface">
+        <div class="sm:w-80 bg-surface">
           <SearchBar
             @update="(searchQuery: string) => searchInput = searchQuery"
           />
